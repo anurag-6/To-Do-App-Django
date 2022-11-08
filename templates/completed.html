@@ -1,0 +1,53 @@
+{%extends 'index.html'%}
+
+{%block title%} Completed Tasks {%endblock title%}
+
+
+{%block links%}
+          
+          <a href="/" class="btn btn-outline-warning " >Back To Home</a>
+{%endblock links%}
+
+{%block content%}
+
+<div class="container">
+
+<h1 class="text-center text-secondary">Your Completed Tasks</h1>
+<table class="table table-hover">
+    <thead>
+        <tr colspan=4>
+
+            <th scope="row">#</th>
+            <th>Title</th>
+
+            <td style="width:30%">Discription</td>
+            <td>Added On</td>
+            <td>Due Date</td>
+            <td colspan="2">Completed On</td>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        {%for item in data%}
+        <tr>
+            <th scope="row">{{item.id}}</th>
+            <td>{{item.title}}</td>
+            <td style=" max-width:20px;overflow-x: auto;">{{item.body}}</td>
+            <td>{{item.created}}</td>
+            <td>{{item.due_date}}</td>
+            <td>{{item.completed_on}}</td>
+
+
+        </tr>
+        {%endfor%}
+
+
+
+    </tbody>
+</table>
+
+</div>
+
+
+{%endblock content%}

@@ -1,0 +1,157 @@
+{%extends 'index.html'%}
+
+{% load crispy_forms_tags %}
+
+{%block title %} View Tasks {%endblock title%}
+
+{%block content %}
+
+<div class="container">
+
+
+
+
+  {%for message in messages%}
+
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+
+
+
+
+  <h3 class="text-center text-secondary">Your Tasks </h3>
+
+  <!-- table  -->
+
+
+
+
+  <table class="table table-hover">
+    <thead>
+      <tr colspan=4>
+
+        <th scope="row">#</th>
+        <th>Title</th>
+
+        <td style="width:30%">Discription</td>
+        <td>Added On</td>
+        <td>Due Date</td>
+        <td colspan="2">Action</td>
+
+
+      </tr>
+    </thead>
+    <tbody>
+      {%for item in data%}
+      <tr>
+        <th scope="row">{{item.id}}</th>
+        <td>{{item.title}}</td>
+        <td style=" max-width:20px;overflow-x: auto;">{{item.body}}</td>
+        <td>{{item.created}}</td>
+        <td>{{item.due_date}}</td>
+        <td>
+          <a href="/complete/{{item.id}}" class="btn btn-outline-success"
+            onclick="return confirm('After the confrimation this task will be visible in completed tasks. ')">Completed</a>
+          <a href="#" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal">Edit</a>
+          <a href="/delete/{{item.id}}" class="btn btn-outline-danger"
+            onclick="return confirm('Are you sure to delete the task ?')">Delete</a>
+
+        </td>
+
+
+      </tr>
+
+
+      <!------------------------------------ modal Edit ---------------------------------------->
+
+      <div class="modal  fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit - {{item.title}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{%url 'edit' item.id %}" method="post">
+
+              <div class="modal-body">
+                {%csrf_token%}
+
+                <div id="div_id_title" class="mb-3"> 
+                  <label for="id_title" class="form-label requiredField"></label> Title </label> 
+                  <input value="{{item.title}}" type="text" name="title" maxlength="20" class="textinput textInput form-control" required id="id_title">
+                 </div>
+
+                <div id="div_id_body" class="mb-3"> 
+                  <label for="id_body" class="form-label">
+                    Discription
+                  </label>
+                   <textarea  name="body" cols="40" rows="10" class="textarea form-control" id="id_body">{{item.body}}
+                   </textarea>
+                </div>
+
+                <div id="div_id_due_date" class="mb-3"> 
+                  <label for="id_due_date" class="form-label requiredField">
+                    Due date </label>
+                     <input value="{{item.due_date|date:'Y-m-d h:i'}}" type="datetime-local" name="due_date" class="textinput textInput form-control" required id="id_due_date">
+                </div>
+
+                
+
+
+
+
+              <!-- end -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add</button>
+          </div>
+          </form>
+
+        </div>
+      </div>
+</div>
+
+
+{%endfor%}
+
+</tbody>
+</table>
+
+
+
+<!------------------------------------ modal add ---------------------------------------->
+
+<div class="modal  fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{%url 'add'%}" method="post">
+
+        <div class="modal-body">
+          {%csrf_token%}
+          {{add_form|crispy}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+{%endblock content%}
